@@ -2,3 +2,6 @@
   service:
     name: postfix
     state: reloaded
+
+- name: update relay_password DB
+  command: "/usr/sbin/postmap hash:/etc/postfix/relay_password"

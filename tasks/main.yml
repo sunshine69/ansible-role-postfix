@@ -1,3 +1,8 @@
+- name: Install postfix
+  apt:
+    name: postfix
+    state: present
+
 - name: ensure postfix directory owned by postfix
   file:
     state: directory

@@ -1,7 +1,14 @@
-- name: Install postfix
+- name: Install postfix for Debian system
   apt:
     name: postfix
     state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Install postfix for RedHat system
+  yum:
+    name: postfix
+    state: present
+  when: ansible_os_family == 'RedHat'
 
 - name: ensure postfix directory owned by postfix
   file:

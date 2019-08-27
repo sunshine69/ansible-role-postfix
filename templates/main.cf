@@ -1,0 +1,36 @@
+# {{ ansible_managed }}
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+# The ssl authentication only tested and works on Ubuntu. Not for centos7
+# setting up this is much more complex and thus drop it for now
+
+myhostname = {{ ansible_fqdn }}
+myorigin = $mydomain
+mydestination =
+mailbox_size_limit = 0
+# We have not supported type `internet` for now
+{% if postfix_server_type|default('local') == 'domain' %}
+inet_interfaces = 127.0.0.1, {{ postfix_local_ip|default(ansible_default_ipv4.address) }}
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+mynetworks = 127.0.0.0/8 {{ postfix_local_domain|default(ansible_default_ipv4.network) }}
+{% else %}
+inet_interfaces = loopback-only
+{% endif %}
+inet_protocols = all
+{% if ansible_os_family == 'Debian' %}
+{% if smtp_username is defined and smtp_password is defined %}
+{% set my_smtp_port = smtp_port|default(465) %}
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/relay_password
+smtp_sasl_security_options = noanonymous
+smtp_use_tls = yes
+smtp_tls_wrappermode = yes
+smtp_tls_security_level = encrypt
+smtp_tls_note_starttls_offer = yes
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+{% else %}
+{% set my_smtp_port = 25 %}
+{% endif %}
+{% endif %}
+relayhost = [{{ smtp_hostname }}]:{{ my_smtp_port|default('') }}
+smtp_generic_maps = hash:/etc/postfix/generic

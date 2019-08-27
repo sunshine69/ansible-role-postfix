@@ -1,7 +1,14 @@
-- name: Install postfix
+- name: Install postfix for Debian system
   apt:
     name: postfix
     state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Install postfix for RedHat system
+  yum:
+    name: postfix
+    state: present
+  when: ansible_os_family == 'RedHat'
 
 - name: ensure postfix directory owned by postfix
   file:
@@ -20,9 +27,24 @@
   notify: update relay_password DB
   when: smtp_username is defined and smtp_password is defined
 
+- name: install generic_map file
+  copy:
+    content: "{{ postfix_generic_map }}"
+    dest: /etc/postfix/generic
+    owner: postfix
+    group: postfix
+  notify: update generic_map
+
+- name: update aliases file
+  lineinfile:
+    path: /etc/aliases
+    regexp: '^root: {{ root_alias_email|default("ops@xvt.com.au") }}$'
+    line: 'root: ops@xvt.com.au'
+  notify: update aliases
+
 - name: install main.cf
   template:
-    src: postfix.cf
+    src: main.cf
     dest: /etc/postfix/main.cf
   notify: reload postfix
 

@@ -9,5 +9,8 @@
 - name: update relay_password DB
   command: "/usr/sbin/postmap hash:/etc/postfix/relay_password"
 
-- name: refresh generic map
+- name: update generic_map
   command: "/usr/sbin/postmap hash:/etc/postfix/generic"
+
+- name: update aliases
+  command: 'newaliases'

@@ -3,11 +3,19 @@
     name: postfix
     state: reloaded
 
-- name: update newalias
+- name: refresh newalias
   command: '/usr/bin/newaliases'
 
 - name: update relay_password DB
   command: "/usr/sbin/postmap hash:/etc/postfix/relay_password"
 
-- name: update generic map
+<<<<<<< HEAD
+- name: refresh generic map
   command: "/usr/sbin/postmap hash:/etc/postfix/generic"
+=======
+- name: update generic_map
+  command: "/usr/sbin/postmap hash:/etc/postfix/generic"
+
+- name: update aliases
+  command: 'newaliases'
+>>>>>>> More features

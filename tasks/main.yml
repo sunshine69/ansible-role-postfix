@@ -33,14 +33,14 @@
     dest: /etc/postfix/generic
     owner: postfix
     group: postfix
-  notify: update generic_map
+  notify: update generic map
 
 - name: update aliases file
   lineinfile:
     path: /etc/aliases
     regexp: '^root: {{ root_alias_email|default("ops@xvt.com.au") }}$'
     line: 'root: ops@xvt.com.au'
-  notify: update aliases
+  notify: update newalias
 
 - name: install main.cf
   template:
@@ -52,13 +52,13 @@
   lineinfile:
     path: /etc/aliases
     line: 'root: ops@xvt.com.au'
-  notify: refresh newalias
+  notify: update newalias
 
 - name: install generic map
   template:
     src: generic
     dest: /etc/postfix/generic
-  notify: refresh generic map
+  notify: update generic map
 
 - name: ensure postfix is enabled and started
   service:

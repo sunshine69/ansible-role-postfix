@@ -7,7 +7,7 @@
   command: '/usr/bin/newaliases'
 
 - name: update relay_password DB
-  command: "/usr/sbin/postmap hash:/etc/postfix/relay_password"
+  shell: "rm -f /etc/postfix/relay_password.db; sleep 1; /usr/sbin/postmap hash:/etc/postfix/relay_password"
 
 - name: update generic map
-  command: "/usr/sbin/postmap hash:/etc/postfix/generic"
+  shell: "rm -f /etc/postfix/generic.db; sleep 1; /usr/sbin/postmap hash:/etc/postfix/generic"

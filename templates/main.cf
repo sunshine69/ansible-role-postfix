@@ -18,7 +18,7 @@ inet_interfaces = loopback-only
 {% endif %}
 inet_protocols = all
 {% if ansible_os_family == 'Debian' %}
-{% if smtp_username is defined and smtp_password is defined %}
+{% if smtp_username is defined and smtp_username and smtp_password is defined and smtp_password %}
 {% set my_smtp_port = smtp_port|default(465) %}
 smtp_sasl_auth_enable = yes
 smtp_sasl_password_maps = hash:/etc/postfix/relay_password

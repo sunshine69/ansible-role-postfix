@@ -48,17 +48,6 @@
     dest: /etc/postfix/main.cf
   notify: reload postfix
 
-- name: alias system root email to ops@xvt.com.au
-  lineinfile:
-    path: /etc/aliases
-    line: 'root: ops@xvt.com.au'
-  notify: update newalias
-
-- name: install generic map
-  template:
-    src: generic
-    dest: /etc/postfix/generic
-  notify: update generic map
 
 - name: ensure postfix is enabled and started
   service:

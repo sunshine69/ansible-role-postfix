@@ -1,2 +1,0 @@
-ubuntu@{{ ansible_fqdn }} ops@xvt.com.au
-root@{{ ansible_fqdn }} ops@xvt.com.au
